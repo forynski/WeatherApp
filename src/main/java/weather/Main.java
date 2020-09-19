@@ -1,8 +1,6 @@
 package weather;
 
-import forecastsource.OpenWeather;
-
-import java.time.LocalDate;
+import weather.forecastsource.openweather.OpenWeather;
 
 public class Main {
 
