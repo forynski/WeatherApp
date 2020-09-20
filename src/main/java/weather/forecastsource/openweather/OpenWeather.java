@@ -1,7 +1,6 @@
 package weather.forecastsource.openweather;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.client.ClientProtocolException;
 import weather.forecastsource.openweather.model.OpenWeatherCoordsResponse;
 import weather.forecastsource.openweather.model.OpenWeatherCurrentForecast;
 import weather.forecastsource.openweather.model.OpenWeatherResponse;

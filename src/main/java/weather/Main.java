@@ -5,12 +5,17 @@ import weather.forecastsource.openweather.OpenWeather;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 
 public class Main {
 
     public static void main(String[] args) {
         OpenWeather op = new OpenWeather(readKey());
         System.out.println(op.getForecast(-1.466667, 52.916668));
+    }
+
+    private static void callArbitraryValues(OpenWeather, forecastSource) {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
     }
 
     private static String readKey() {
