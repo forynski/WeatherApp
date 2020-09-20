@@ -1,3 +1,4 @@
 # Project exclude paths
 /target/
 key.txt
+test.db.mv.db

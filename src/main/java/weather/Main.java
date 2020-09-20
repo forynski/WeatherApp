@@ -1,5 +1,6 @@
 package weather;
 
+import weather.forecastcache.WeatherForecastDao;
 import weather.forecastsource.openweather.OpenWeather;
 import org.apache.commons.cli.*;
 
@@ -19,6 +20,11 @@ public class Main {
         callWithArbitraryArguments(forecastSource);
 
         callWithPassedArguments(forecastSource, args);
+
+        WeatherForecastDao dao = new WeatherForecastDao();
+        dao.saveForecast(forecastSource.getForecast("Rzeszow"));
+
+        System.out.println(dao.listForecast());
     }
 
     private static void callWithPassedArguments(OpenWeather forecastSource, String[] args) {
@@ -48,7 +54,6 @@ public class Main {
             }
         }
     }
-
     private static void callWithArbitraryArguments(OpenWeather forecastSource) {
         LocalDate fiveDaysForward = LocalDate.now().plusDays(5);
 
