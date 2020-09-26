@@ -1,5 +1,6 @@
 package weather;
 
+import weather.model.CachedForecast;
 import weather.model.WeatherForecast;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -19,13 +20,12 @@ public class DatabaseConfig {
         settings.put(Environment.URL, "jdbc:h2:file:./test.db");
         settings.put(Environment.USER, "SA");
         settings.put(Environment.PASS, "");
-        settings.put(Environment.SHOW_SQL, "true");
+        settings.put(Environment.SHOW_SQL, "false");
         settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
         settings.put(Environment.HBM2DDL_AUTO, "create-drop");
         // optional in most cases
         settings.put(Environment.DRIVER, "org.h2.Driver");
-        settings.put(Environment.DIALECT,
-                "org.hibernate.dialect.H2Dialect");
+        settings.put(Environment.DIALECT, "org.hibernate.dialect.H2Dialect");
 
         return settings;
     }
@@ -36,6 +36,7 @@ public class DatabaseConfig {
         configuration.setProperties(getSettings());
 
         configuration.addAnnotatedClass(WeatherForecast.class);
+        configuration.addAnnotatedClass(CachedForecast.class);
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();

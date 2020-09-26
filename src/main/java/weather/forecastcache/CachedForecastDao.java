@@ -1,14 +1,15 @@
 package weather.forecastcache;
 
 import weather.DatabaseConfig;
-import weather.model.WeatherForecast;
+import weather.model.CachedForecast;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.time.LocalDate;
 import java.util.List;
 
-public class WeatherForecastDao {
-    public void saveForecast(WeatherForecast forecast) {
+public class CachedForecastDao {
+    public void saveForecast(CachedForecast forecast) {
         try (Session session = DatabaseConfig.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
 
@@ -20,14 +21,19 @@ public class WeatherForecastDao {
     }
 
     @SuppressWarnings("unchecked")
-    public List<WeatherForecast> listForecast() {
+    public List<CachedForecast> listForecast() {
         try (Session session = DatabaseConfig.getSessionFactory().openSession()) {
 
-            List<WeatherForecast> forecasts = session
-                    .createQuery("select w from WeatherForecast w").list();
+            List<CachedForecast> forecasts = session
+                    .createQuery("select f from CachedForecast f").list();
 
 //        session.close();
             return forecasts;
         }
     }
+
+    public CachedForecast findWeatherForecastForLocalization(String localization, LocalDate date) {
+        return null;
+    }
+
 }

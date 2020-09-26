@@ -1,13 +1,18 @@
 package weather;
 
+import weather.forecastcache.CachedForecastDao;
 import weather.forecastcache.WeatherForecastDao;
 import weather.forecastsource.openweather.OpenWeather;
 import org.apache.commons.cli.*;
+import weather.model.CachedForecast;
+import weather.model.WeatherForecast;
+import weather.model.WeatherSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -15,14 +20,31 @@ import java.util.Objects;
 public class Main {
     public static void main(String[] args) throws IOException, ParseException {
         String key = Files.readAllLines(Paths.get("key.txt")).get(0).trim();
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
         OpenWeather forecastSource = new OpenWeather(key);
 
-        callWithArbitraryArguments(forecastSource);
 
-        callWithPassedArguments(forecastSource, args);
+//        callWithArbitraryArguments(forecastSource);
+//
+//        callWithPassedArguments(forecastSource, args);
 
-        WeatherForecastDao dao = new WeatherForecastDao();
-        dao.saveForecast(forecastSource.getForecast("Derby"));
+        CachedForecastDao dao = new CachedForecastDao();
+//        WeatherForecastDao weatherForecastDao = new WeatherForecastDao();
+        CachedForecast cached = new CachedForecast();
+        cached.setSource(WeatherSource.OPEN_WEATHER);
+        cached.setLocalization("Derby");
+        cached.setDate(tomorrow);
+        cached.setCreated(LocalDateTime.now());
+
+        WeatherForecast forecastForCity = forecastSource.getForecast("Derby", tomorrow);
+
+//        weatherForecastDao.saveForecast(forecastForCity);
+        cached.setForecast(forecastForCity);
+
+        dao.saveForecast(cached);
+
+//        WeatherForecastDao dao = new WeatherForecastDao();
+//        dao.saveForecast(forecastSource.getForecast("Derby"));
 
         System.out.println(dao.listForecast());
     }

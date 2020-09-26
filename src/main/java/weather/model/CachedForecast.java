@@ -11,8 +11,11 @@ public class CachedForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private WeatherForecast forecast;
+
+    private WeatherSource source;
+    private String localization;
     private LocalDate date;
     private LocalDateTime created;
 
@@ -44,7 +47,35 @@ public class CachedForecast {
         return created;
     }
 
+    public WeatherSource getSource() {
+        return source;
+    }
+
+    public void setSource(WeatherSource source) {
+        this.source = source;
+    }
+
+    public String getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(String localization) {
+        this.localization = localization;
+    }
+
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    @Override
+    public String toString() {
+        return "CachedForecast{" +
+                "id=" + id +
+                ", forecast=" + forecast +
+                ", source=" + source +
+                ", localization='" + localization + '\'' +
+                ", date=" + date +
+                ", created=" + created +
+                '}';
     }
 }

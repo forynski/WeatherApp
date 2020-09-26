@@ -2,6 +2,7 @@ package weather.model;
 
 import javax.persistence.*;
 
+
 @Entity
 public class WeatherForecast {
 
@@ -9,7 +10,6 @@ public class WeatherForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "TEMP", columnDefinition = "DECIMAL(4,2)")
     private double temperature;
     private int pressure;
     private double humidity;
