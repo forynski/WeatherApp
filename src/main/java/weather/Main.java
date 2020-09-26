@@ -22,7 +22,7 @@ public class Main {
         callWithPassedArguments(forecastSource, args);
 
         WeatherForecastDao dao = new WeatherForecastDao();
-        dao.saveForecast(forecastSource.getForecast("Rzeszow"));
+        dao.saveForecast(forecastSource.getForecast("Derby"));
 
         System.out.println(dao.listForecast());
     }
