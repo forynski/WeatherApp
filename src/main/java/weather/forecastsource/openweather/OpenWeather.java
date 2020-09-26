@@ -38,40 +38,50 @@ public class OpenWeather {
         }
         System.out.println("Using OpenWeather to get forecast");
         WeatherForecast weatherForecast = findOpenWeatherForecast(city, date);
+
         saveCachedForecast(weatherForecast, city, date);
         return weatherForecast;
     }
+
     public WeatherForecast getForecast(double lat, double lon) {
         return getForecast(lat, lon, getTomorrow());
     }
+
     public WeatherForecast getForecast(double lat, double lon, LocalDate date) {
         CachedForecast previousForecast = findCachedForecast(lat, lon, date);
         if (previousForecast != null) {
             System.out.println("Returning cached result!");
             return previousForecast.getForecast();
         }
+
         System.out.println("Using OpenWeather to get forecast");
         WeatherForecast weatherForecast = findOpenWeatherForecast(lat, lon, date);
         saveCachedForecast(weatherForecast, lat, lon, date);
         return weatherForecast;
     }
+
     private CachedForecast findCachedForecast(double lat, double lon, LocalDate date) {
         return cache.findWeatherForecastForLocalization(WeatherSource.OPEN_WEATHER, getLocalization(lat, lon), date);
     }
+
     private CachedForecast findCachedForecast(String city, LocalDate date) {
         return cache.findWeatherForecastForLocalization(WeatherSource.OPEN_WEATHER, city, date);
     }
+
     private void saveCachedForecast(WeatherForecast weatherForecast, double lat, double lon, LocalDate date) {
         CachedForecast cachedForecast = new CachedForecast(weatherForecast, WeatherSource.OPEN_WEATHER, getLocalization(lat, lon), date);
         cache.saveForecast(cachedForecast);
     }
+
     private void saveCachedForecast(WeatherForecast weatherForecast, String city, LocalDate date) {
         CachedForecast cachedForecast = new CachedForecast(weatherForecast, WeatherSource.OPEN_WEATHER, city, date);
         cache.saveForecast(cachedForecast);
     }
+
     private String getLocalization(double lat, double lon) {
         return String.format("%f;%f", lat, lon);
     }
+
     private WeatherForecast findOpenWeatherForecast(double lat, double lon, LocalDate date) {
         try {
             String uri = String.format(URI_PATTERN, lat, lon, key);
@@ -85,6 +95,7 @@ public class OpenWeather {
             return null;
         }
     }
+
     private WeatherForecast findOpenWeatherForecast(String city, LocalDate date) {
         try {
             String uri = String.format(CITY_PATTERN, city, key);
@@ -97,6 +108,7 @@ public class OpenWeather {
             return null;
         }
     }
+
     private OpenWeatherDailyForecast findForecastForDate(List<OpenWeatherDailyForecast> dailyForecasts, LocalDate date) {
         return dailyForecasts.stream()
                 .filter(forecast -> date.equals(Instant.ofEpochSecond(forecast.getDateTime())
@@ -104,6 +116,7 @@ public class OpenWeather {
                 .findAny()
                 .orElse(null);
     }
+
     private LocalDate getTomorrow() {
         return LocalDate.now().plusDays(1);
     }

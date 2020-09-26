@@ -63,8 +63,8 @@ public class Main {
     private static void callWithArbitraryArguments(OpenWeather forecastSource) {
         LocalDate fiveDaysForward = LocalDate.now().plusDays(5);
 
-        System.out.println(forecastSource.getForecast(52.916668, -1.466667));
-        System.out.println(forecastSource.getForecast("Derby"));
+        System.out.println(forecastSource.getForecast(52.916668, -1.466667, fiveDaysForward));
+        System.out.println(forecastSource.getForecast("Derby", fiveDaysForward));
 
         System.out.println(forecastSource.getForecast(52.916668, -1.466667));
         System.out.println(forecastSource.getForecast("Derby"));
