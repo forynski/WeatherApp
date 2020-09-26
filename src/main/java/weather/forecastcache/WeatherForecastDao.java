@@ -9,15 +9,13 @@ import java.util.List;
 
 public class WeatherForecastDao {
     public void saveForecast(WeatherForecast forecast) {
-        Session session = DatabaseConfig.getSessionFactory().openSession();
-        try {
+         try(Session session = DatabaseConfig.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
 
             session.save(forecast);
 
             transaction.commit();
-        } finally {
-            session.close();
+//            session.close();
         }
     }
 
@@ -28,7 +26,7 @@ public class WeatherForecastDao {
         List<WeatherForecast> forecasts = session
                 .createQuery("select w from WeatherForecast w").list();
 
-        session.close();
+//        session.close();
         return forecasts;
     }
 }
