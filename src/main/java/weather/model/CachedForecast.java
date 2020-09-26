@@ -7,6 +7,16 @@ import java.time.LocalDateTime;
 @Entity
 public class CachedForecast {
 
+    public CachedForecast() { }
+
+    public CachedForecast(WeatherForecast forecast, WeatherSource source, String localization, LocalDate date) {
+        this.forecast = forecast;
+        this.source = source;
+        this.localization = localization;
+        this.date = date;
+        this.created = LocalDateTime.now();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

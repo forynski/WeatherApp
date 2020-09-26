@@ -1,12 +1,15 @@
 package weather.forecastsource.openweather;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import weather.forecastcache.CachedForecastDao;
 import weather.forecastsource.openweather.model.Coords;
 import weather.forecastsource.openweather.model.OpenWeatherDailyForecast;
 import weather.forecastsource.openweather.model.OpenWeatherResponse;
 import weather.forecastsource.openweather.model.OpenWeatherWeatherResponse;
+import weather.model.CachedForecast;
 import weather.model.WeatherForecast;
 import org.apache.http.client.fluent.Request;
+import weather.model.WeatherSource;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -20,9 +23,12 @@ public class OpenWeather {
     private final static ObjectMapper MAPPER = new ObjectMapper();
 
     private final String key;
+    private final CachedForecastDao cache;
+
 
     public OpenWeather(String key) {
         this.key = key;
+        this.cache = new CachedForecastDao();
     }
 
     public WeatherForecast getForecast(String city) {
@@ -54,7 +60,10 @@ public class OpenWeather {
                     .execute().returnContent().asString();
             OpenWeatherResponse openWeatherResponse = MAPPER.readValue(response, OpenWeatherResponse.class);
             OpenWeatherDailyForecast forecastForDate = findForecastForDate(openWeatherResponse.getDaily(), date);
-            return WeatherForecastMapper.fromOpenWeatherForecast(forecastForDate);
+            WeatherForecast weatherForecast = WeatherForecastMapper.fromOpenWeatherForecast(forecastForDate);
+            CachedForecast cachedForecast = new CachedForecast(weatherForecast, WeatherSource.OPEN_WEATHER, String.format("%f;%f", lat, lon), date);
+            cache.saveForecast(cachedForecast);
+            return weatherForecast;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

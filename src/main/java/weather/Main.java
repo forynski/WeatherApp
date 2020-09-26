@@ -29,7 +29,6 @@ public class Main {
 //        callWithPassedArguments(forecastSource, args);
 
         CachedForecastDao dao = new CachedForecastDao();
-//        WeatherForecastDao weatherForecastDao = new WeatherForecastDao();
         CachedForecast cached = new CachedForecast();
         cached.setSource(WeatherSource.OPEN_WEATHER);
         cached.setLocalization("Derby");
@@ -38,13 +37,9 @@ public class Main {
 
         WeatherForecast forecastForCity = forecastSource.getForecast("Derby", tomorrow);
 
-//        weatherForecastDao.saveForecast(forecastForCity);
         cached.setForecast(forecastForCity);
-
         dao.saveForecast(cached);
 
-//        WeatherForecastDao dao = new WeatherForecastDao();
-//        dao.saveForecast(forecastSource.getForecast("Derby"));
 
         System.out.println(dao.listForecast());
     }
