@@ -10,12 +10,15 @@ import java.util.List;
 public class WeatherForecastDao {
     public void saveForecast(WeatherForecast forecast) {
         Session session = DatabaseConfig.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
+        try {
+            Transaction transaction = session.beginTransaction();
 
-        session.save(forecast);
+            session.save(forecast);
 
-        transaction.commit();
-        session.close();
+            transaction.commit();
+        } finally {
+            session.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
