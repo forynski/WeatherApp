@@ -4,6 +4,7 @@ import weather.DatabaseConfig;
 import weather.model.CachedForecast;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import weather.model.WeatherSource;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,8 +33,14 @@ public class CachedForecastDao {
         }
     }
 
-    public CachedForecast findWeatherForecastForLocalization(String localization, LocalDate date) {
-        return null;
-    }
+    public CachedForecast findWeatherForecastForLocalization(WeatherSource source, String localization, LocalDate date) {
+        try (Session session = DatabaseConfig.getSessionFactory().openSession()) {
+            List<CachedForecast> forecasts = session
+                    .createQuery("select f from CachedForecast f where f.source = source and f.localization = localization and f.date = date ").list();
 
+            return forecasts.stream().findFirst().orElse(null);
+
+
+        }
+    }
 }

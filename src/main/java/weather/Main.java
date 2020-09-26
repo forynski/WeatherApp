@@ -23,25 +23,14 @@ public class Main {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         OpenWeather forecastSource = new OpenWeather(key);
 
-
 //        callWithArbitraryArguments(forecastSource);
-//
 //        callWithPassedArguments(forecastSource, args);
 
-        CachedForecastDao dao = new CachedForecastDao();
-        CachedForecast cached = new CachedForecast();
-        cached.setSource(WeatherSource.OPEN_WEATHER);
-        cached.setLocalization("Derby");
-        cached.setDate(tomorrow);
-        cached.setCreated(LocalDateTime.now());
+        WeatherForecast forecastForCity1 = forecastSource.getForecast("Derby", tomorrow);
+        WeatherForecast forecastForCity2 = forecastSource.getForecast("Derby", tomorrow);
 
-        WeatherForecast forecastForCity = forecastSource.getForecast("Derby", tomorrow);
-
-        cached.setForecast(forecastForCity);
-        dao.saveForecast(cached);
-
-
-        System.out.println(dao.listForecast());
+        System.out.println(forecastForCity1);
+        System.out.println(forecastForCity2);
     }
 
     private static void callWithPassedArguments(OpenWeather forecastSource, String[] args) {

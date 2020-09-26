@@ -53,7 +53,13 @@ public class OpenWeather {
     }
 
     public WeatherForecast getForecast(double lat, double lon, LocalDate date) {
+        CachedForecast previousForecast = cache.findWeatherForecastForLocalization(WeatherSource.OPEN_WEATHER, String.format("%f;%f", lat, lon), date);
+        if (previousForecast != null) {
+            System.out.println("Returning cached result!");
+            return previousForecast.getForecast();
+        }
         try {
+            System.out.println("Using OpenWeather to get forecast");
             String uri = String.format(URI_PATTERN, lat, lon, key);
 
             String response = Request.Get(uri)
