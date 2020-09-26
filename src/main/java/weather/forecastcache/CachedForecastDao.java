@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import weather.model.WeatherSource;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CachedForecastDao {
@@ -34,9 +35,17 @@ public class CachedForecastDao {
     }
 
     public CachedForecast findWeatherForecastForLocalization(WeatherSource source, String localization, LocalDate date) {
+        LocalDateTime todayMidnight = LocalDate.now().atStartOfDay();
         try (Session session = DatabaseConfig.getSessionFactory().openSession()) {
             List<CachedForecast> forecasts = session
-                    .createQuery("select f from CachedForecast f where f.source = source and f.localization = localization and f.date = date ").list();
+                    .createQuery("select f from CachedForecast f where " +
+                            "f.source = :source and f.localization = :localization and f.date = :date " +
+                            "and f.created > :todayMidnight")
+                    .setParameter("source", source)
+                    .setParameter("localization", localization)
+                    .setParameter("date", date)
+                    .setParameter("todayMidnight", todayMidnight)
+                    .list();
 
             return forecasts.stream().findFirst().orElse(null);
 
